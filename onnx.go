@@ -31,7 +31,11 @@ func newSession(modelPath string, inputName, outputName []string) (*ort.DynamicA
 
 // 获取链接库 https://github.com/microsoft/onnxruntime/releases
 func getSharedLibPath() string {
-	lib := filepath.Join(".", "lib_onnx")
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("get path failed")
+	}
+	lib := filepath.Join(filepath.Dir(filename), "lib_onnx")
 	switch runtime.GOOS {
 	case "windows":
 		if runtime.GOARCH == "amd64" {
